@@ -1,0 +1,9 @@
+**/bin/
+**/obj/
+.vs/
+react-capture/node_modules/
+react-capture/test-results/
+results/
+manual-results/
+calibration-results/
+qa-release/

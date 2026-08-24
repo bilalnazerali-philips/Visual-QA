@@ -1,0 +1,1 @@
+<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><UseWPF>true</UseWPF><TargetFramework>net8.0-windows</TargetFramework></PropertyGroup><ItemGroup><ProjectReference Include="..\\VisualQa.Core\\VisualQa.Core.csproj" /></ItemGroup></Project>

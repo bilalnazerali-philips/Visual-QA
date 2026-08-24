@@ -1,0 +1,1 @@
+<Project Sdk="Microsoft.NET.Sdk"><ItemGroup><ProjectReference Include="..\\VisualQa.Core\\VisualQa.Core.csproj" /><PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" /><PackageReference Include="OpenCvSharp4" Version="4.10.0.20240616" /></ItemGroup></Project>

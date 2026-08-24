@@ -1,0 +1,36 @@
+name: Visual QA
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  core:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet restore VisualQa.CrossPlatform.sln
+      - run: dotnet build VisualQa.CrossPlatform.sln --no-restore
+      - run: dotnet test VisualQa.CrossPlatform.sln --no-build
+
+  wpf-calibration:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet restore VisualQa.sln
+      - run: dotnet build VisualQa.sln --no-restore
+      - run: dotnet test VisualQa.sln --no-build
+      - run: dotnet run --project src/VisualQa.Calibration -- --manifest calibration/manifest.json --output calibration-results --config visualqa.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: calibration-results
+          path: calibration-results

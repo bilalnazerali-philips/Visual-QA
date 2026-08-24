@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0-windows</TargetFramework><UseWPF>true</UseWPF></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VisualQa.Core\VisualQa.Core.csproj" />
+    <ProjectReference Include="..\VisualQa.Configuration\VisualQa.Configuration.csproj" />
+    <ProjectReference Include="..\VisualQa.ImageProcessing\VisualQa.ImageProcessing.csproj" />
+    <ProjectReference Include="..\VisualQa.Reporting\VisualQa.Reporting.csproj" />
+    <ProjectReference Include="..\VisualQa.WpfCapture\VisualQa.WpfCapture.csproj" />
+  </ItemGroup>
+</Project>

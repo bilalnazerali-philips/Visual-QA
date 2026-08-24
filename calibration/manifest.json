@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "width": 360,
+  "height": 180,
+  "dpi": 96,
+  "environment": "Windows / WPF / Segoe UI",
+  "cases": [
+    { "id": "01", "title": "exact match", "variant": "exact", "expectedStatus": "Pass", "requiresDiffRegion": false },
+    { "id": "02", "title": "+1px X shift", "variant": "x1", "expectedStatus": "Warning", "requiresDiffRegion": true },
+    { "id": "03", "title": "+4px X shift", "variant": "x4", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "04", "title": "width +4px", "variant": "width4", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "05", "title": "height +4px", "variant": "height4", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "06", "title": "wrong foreground color", "variant": "wrong-foreground", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "07", "title": "subtle foreground difference", "variant": "subtle-foreground", "expectedStatus": "Warning", "requiresDiffRegion": true },
+    { "id": "08", "title": "wrong font size", "variant": "font-size", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "09", "title": "wrong font weight", "variant": "font-weight", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "10", "title": "wrong line height", "variant": "line-height", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "11", "title": "wrong letter spacing", "variant": "letter-spacing", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "12", "title": "missing icon", "variant": "missing-icon", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "13", "title": "wrong icon", "variant": "wrong-icon", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "14", "title": "missing text", "variant": "missing-text", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "15", "title": "extra element", "variant": "extra-element", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "16", "title": "incorrect gap", "variant": "gap", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "17", "title": "incorrect padding", "variant": "padding", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "18", "title": "clipping", "variant": "clipping", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "19", "title": "background mismatch", "variant": "background", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "20", "title": "anti-aliasing-only difference", "variant": "anti-alias", "expectedStatus": "Warning", "requiresDiffRegion": true },
+    { "id": "21", "title": "DPI difference", "variant": "dpi", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "22", "title": "wrong component width", "variant": "component-width", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "23", "title": "invisible element", "variant": "invisible", "expectedStatus": "Fail", "requiresDiffRegion": true },
+    { "id": "24", "title": "incorrect vertical alignment", "variant": "vertical-alignment", "expectedStatus": "Fail", "requiresDiffRegion": true }
+  ]
+}
