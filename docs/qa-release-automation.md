@@ -39,3 +39,21 @@ Publish `qa-release/VisualQa-QA-win-x64.zip` as the CI artifact. A non-zero scri
 This repository also includes [`.github/workflows/qa-release.yml`](../.github/workflows/qa-release.yml). It runs the same script on `windows-latest` after every push to `main` and can be started manually. GitHub Actions publishes the ZIP as the `VisualQa-QA-win-x64` workflow artifact.
 
 The package is Windows x64 because it is intended for QA users running the supplied executable. The source CLI and image-only comparison engine can also be built on macOS and Linux from `VisualQa.CrossPlatform.sln`; create platform-specific packages separately when required.
+
+## macOS package
+
+On macOS, install the .NET 8 SDK and run PowerShell (`pwsh`), then use:
+
+```powershell
+./scripts/New-QARelease-macOS.ps1
+```
+
+This creates `qa-release/VisualQa-QA-osx-arm64.zip`, suitable for Apple Silicon Macs. For an Intel Mac, use:
+
+```powershell
+./scripts/New-QARelease-macOS.ps1 -Runtime osx-x64
+```
+
+The packaged executable is `VisualQa.Cli` (no `.exe` suffix). Run it from Terminal with `./VisualQa.Cli compare-images ...`. macOS packages support the cross-platform image-only workflow; WPF capture remains Windows-only.
+
+The [macOS workflow](../.github/workflows/qa-release-macos.yml) validates and publishes an Intel-compatible `osx-x64` package on GitHub-hosted macOS runners.

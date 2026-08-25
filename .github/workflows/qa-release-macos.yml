@@ -1,0 +1,24 @@
+name: Package macOS QA CLI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  package-macos-qa-cli:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Build, test, validate, and package
+        shell: pwsh
+        run: ./scripts/New-QARelease-macOS.ps1 -Runtime osx-x64
+      - name: Publish QA package
+        uses: actions/upload-artifact@v4
+        with:
+          name: VisualQa-QA-osx-x64
+          path: qa-release/VisualQa-QA-osx-x64.zip
+          if-no-files-found: error
