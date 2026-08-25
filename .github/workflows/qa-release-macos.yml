@@ -14,8 +14,8 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Build, test, validate, and package
-        shell: pwsh
-        run: ./scripts/New-QARelease-macOS.ps1 -Runtime osx-x64
+        shell: bash
+        run: bash ./scripts/New-QARelease-macOS.sh --runtime osx-x64
       - name: Publish QA package
         uses: actions/upload-artifact@v4
         with:

@@ -42,18 +42,18 @@ The package is Windows x64 because it is intended for QA users running the suppl
 
 ## macOS package
 
-On macOS, install the .NET 8 SDK and run PowerShell (`pwsh`), then use:
+On macOS, install the .NET 8 SDK, then run the native Bash script (no PowerShell is required):
 
-```powershell
-./scripts/New-QARelease-macOS.ps1
+```bash
+bash ./scripts/New-QARelease-macOS.sh
 ```
 
 This creates `qa-release/VisualQa-QA-osx-arm64.zip`, suitable for Apple Silicon Macs. For an Intel Mac, use:
 
-```powershell
-./scripts/New-QARelease-macOS.ps1 -Runtime osx-x64
+```bash
+bash ./scripts/New-QARelease-macOS.sh --runtime osx-x64
 ```
 
 The packaged executable is `VisualQa.Cli` (no `.exe` suffix). Run it from Terminal with `./VisualQa.Cli compare-images ...`. macOS packages support the cross-platform image-only workflow; WPF capture remains Windows-only.
 
-The [macOS workflow](../.github/workflows/qa-release-macos.yml) validates and publishes an Intel-compatible `osx-x64` package on GitHub-hosted macOS runners.
+The PowerShell version, `New-QARelease-macOS.ps1`, remains available for teams that standardize on PowerShell. The [macOS workflow](../.github/workflows/qa-release-macos.yml) uses the Bash script and publishes an Intel-compatible `osx-x64` package on GitHub-hosted macOS runners.
