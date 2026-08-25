@@ -7,6 +7,7 @@ See [the user guide](docs/user-guide.md) for setup, capture, comparison, reporti
 See [the Figma design-input guide](docs/figma-design-input-guide.md) for obtaining `reference.png`, raw Figma JSON, and normalized `design.json`.
 See [the CLI user manual](docs/cli-user-manual.md) for every supported command, its options, outputs, exit codes, and examples.
 See [the documentation validation status](docs/documentation-status.md) for code-backed capability and limitation evidence.
+See [QA release packaging automation](docs/qa-release-automation.md) to produce the self-contained Windows QA ZIP locally or in CI.
 
 ## Image-only calibration
 
