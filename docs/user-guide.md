@@ -41,6 +41,7 @@ visual-tests/
     design/
       reference.png
       design.json
+      figma-source.json
     wpf/
       actual.png
       runtime.json
@@ -52,6 +53,19 @@ visual-tests/
 `design.json` and `runtime.json` must contain `"schemaVersion": 1`. The expected and actual files must be captured at the same intended component dimensions. Do not pre-scale either screenshot to make it match.
 
 For the full Figma desktop export and REST JSON acquisition workflow, see [figma-design-input-guide.md](figma-design-input-guide.md).
+
+### Import directly from a Figma selection
+
+Select one component/state in Figma, use **Copy link to selection**, and import it before capturing the implementation. Place the token in the local Git-ignored `.visualqa/figma-token.txt` file.
+
+```powershell
+dotnet run --project src/VisualQa.Cli -- import-figma `
+  --url "<figma-link-to-selection>"
+```
+
+The command derives the fixture folder and creates `design.json`, a 1x Figma `reference.png`, and `figma-source.json` without storing the token. It prints exactly where they are saved. Add `--scenario`, `--output`, or `--token-file` to override defaults, or `--id-map <map.json>` if Figma node IDs/layer names need explicit mapping to WPF `VisualQa.Id` or React `data-qa` values.
+
+For a group of Figma selections, use `import-figma --url-file .visualqa/figma-import-urls.txt`, with one copied link per line. The CLI imports each component into its own derived fixture directory and writes `visual-tests/import-summary.json`.
 
 ## Add stable element IDs
 

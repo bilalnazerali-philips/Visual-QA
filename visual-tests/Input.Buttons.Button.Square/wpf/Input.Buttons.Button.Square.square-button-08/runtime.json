@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "name": "Input.Buttons.Button.Square.square-button-08",
+  "platform": "wpf",
+  "width": 101.33333333333333,
+  "height": 40,
+  "dpiX": 144,
+  "dpiY": 144,
+  "environment": {
+    "os": "Microsoft Windows NT 10.0.26100.0",
+    "runtime": "8.0.29",
+    "scaleFactor": 1.5,
+    "renderer": "WPF",
+    "fonts": null
+  },
+  "elements": [
+    {
+      "id": "square-button-08",
+      "type": "Button",
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 101.33333333333333,
+        "height": 40
+      },
+      "text": "Alarm",
+      "fontFamily": "./NeueFrutigerWorld/#Neue Frutiger World",
+      "fontSize": 16,
+      "fontWeight": "Bold",
+      "foregroundColor": "#FFFFFF",
+      "backgroundColor": "#0072DB",
+      "margin": {
+        "top": 5,
+        "right": 5,
+        "bottom": 5,
+        "left": 5
+      },
+      "padding": {
+        "top": 8,
+        "right": 12,
+        "bottom": 8,
+        "left": 12
+      },
+      "isVisible": true
+    }
+  ]
+}

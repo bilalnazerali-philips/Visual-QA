@@ -7,15 +7,15 @@ For each Visual QA component, create these design-side inputs:
 ```text
 visual-tests/<ComponentName>/design/
   reference.png
-  figma-export.json
+  figma-source.json
   design.json
 ```
 
 - `reference.png` is the visual reference exported from Figma.
-- `figma-export.json` is the local raw Figma REST file/node export.
+- `figma-source.json` records the selected Figma file/node provenance without a token.
 - `design.json` is the normalized Visual QA contract used by the CLI.
 
-Visual QA never needs a Figma token at comparison time. Export the source JSON once, keep it locally, and normalize it into the test directory.
+Visual QA never needs a Figma token at comparison time. The token is needed only when importing a design from Figma.
 
 ## 1. Prepare the Figma component
 
@@ -33,7 +33,27 @@ https://www.figma.com/design/<file-key>/<file-name>?node-id=<node-id>
 
 The exact URL shape can vary by Figma client/version. The file key identifies the file; `node-id` identifies the frame or component being tested.
 
-## 2. Export `reference.png` in the Figma application
+## 2. Import the selected component with Visual QA (recommended)
+
+The CLI can acquire the selected node JSON and matching `1x` PNG automatically. In Figma, select the exact component/state and use **Copy link to selection**. Create `.visualqa/figma-token.txt` in the repository root, containing only your token, then run:
+
+```powershell
+dotnet run --project C:\Bilal\Visual-QA\src\VisualQa.Cli -- import-figma `
+  --url "<copied-link-to-selection>"
+```
+
+It derives the component folder from the Figma component set and selected variant, then creates `design.json`, `reference.png`, and `figma-source.json` under `visual-tests/<derived-name>/design`. It prints the exact location. Add `--keep-raw` only when troubleshooting an import; the raw response is ignored by Git.
+
+To import several selected components/states, create `.visualqa/figma-import-urls.txt` with one copied link per line and run:
+
+```powershell
+dotnet run --project C:\Bilal\Visual-QA\src\VisualQa.Cli -- import-figma `
+  --url-file .visualqa\figma-import-urls.txt
+```
+
+The batch result is recorded in `visual-tests/import-summary.json`.
+
+## 3. Export `reference.png` in the Figma application (manual fallback)
 
 1. Select the target frame, not an individual child layer.
 2. In the right-side **Design** panel, find **Export**.
@@ -42,7 +62,7 @@ The exact URL shape can vary by Figma client/version. The file key identifies th
 
 Use `1x` unless the WPF capture has intentionally been configured for another matching scale. Do not export a cropped image whose bounds differ from the component frame.
 
-## 3. Obtain `figma-export.json`
+## 4. Obtain raw Figma JSON manually (fallback)
 
 Figma's desktop application exports images directly, but raw design JSON is normally obtained using the Figma REST API. This is a local export step; the resulting file is checked into or stored alongside your Visual QA fixtures.
 
@@ -72,9 +92,9 @@ curl.exe -H "X-Figma-Token: <FIGMA_TOKEN>" "https://api.figma.com/v1/files/<FILE
 
 Keep the token in a secret manager or an environment variable. Never commit the token into source control, `design.json`, or CI logs.
 
-## 4. Normalize into `design.json`
+## 5. Normalize into `design.json` manually (fallback)
 
-The `VisualQa.Figma` library provides `FigmaSpecParser` and `FigmaNormalizer`. Use them from an integration utility or test host to read `figma-export.json` and serialize its `DesignComponentSpec` result as `design.json`. The repository does not yet provide a `visualqa import-figma` command.
+The `VisualQa.Figma` library provides `FigmaSpecParser` and `FigmaNormalizer`. `visualqa import-figma` is the preferred path; use this direct library workflow only when an integration needs to control acquisition itself.
 
 The normalized output has this shape:
 
@@ -100,7 +120,7 @@ The normalized output has this shape:
 
 Review the result before running a comparison. The current normalizer derives initial IDs from layer names; make them match the WPF `VisualQa.Id` values. Figma node IDs and display names are not automatically equivalent to application QA IDs.
 
-## 5. Map IDs deliberately
+## 6. Map IDs deliberately
 
 Use the same stable identifier on both sides:
 

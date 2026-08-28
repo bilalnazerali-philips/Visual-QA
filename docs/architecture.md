@@ -7,7 +7,8 @@ Visual QA verifies whether a rendered UI conforms to a Figma design without AI, 
 ```mermaid
 flowchart TB
   subgraph Sources[Input adapters]
-    Figma[Figma REST file/node export] --> Parser[Figma parser and normalizer]
+    Figma[Figma selected-node URL] --> Import[Figma import adapter]
+    Import --> Parser[Figma parser and normalizer]
     Wpf[WPF component] --> WpfCapture[WPF capture adapter]
     React[React visual-test route] --> ReactCapture[Playwright capture adapter]
   end
@@ -41,7 +42,8 @@ flowchart TB
 
 Figma, WPF, and React are adapters only. They are responsible for converting their native data into the common contracts; neither the comparison engine nor reporting code contains WPF or browser-specific rules.
 
-- `VisualQa.Figma` exposes parsing and normalization of a local Figma REST export into `DesignComponentSpec`. The calling application must serialize that result to `design.json`; no import CLI command is implemented yet.
+- `VisualQa.Figma` downloads a selected Figma node through the official REST node/image endpoints, derives a fixture name from its component set and variant, then normalizes it into `DesignComponentSpec`. With only `--url`, `visualqa import-figma` reads `.visualqa/figma-token.txt` and writes `design.json`, a 1x `reference.png`, and `figma-source.json` under `visual-tests/<derived-name>/design`. Optional command arguments override these defaults.
+- `visualqa import-figma --url-file <file>` provides bounded sequential acquisition for several selected Figma URLs. It writes one fixture per URL and a machine-readable `visual-tests/import-summary.json`; batch mode rejects per-component overrides that would be ambiguous.
 - `VisualQa.WpfCapture` provides `RenderTargetBitmap` rendering and a visual-tree metadata collector. The calling WPF test host must invoke both for the same component instance. It is Windows-only.
 - `react-capture` uses Playwright, `data-qa`, DOM bounds, and computed CSS to create an equivalent runtime snapshot. It is portable wherever Chromium can run.
 
@@ -65,7 +67,7 @@ sequenceDiagram
   participant Engine as QA engine
   participant Report as Offline report
 
-  CI->>Adapter: Produce design.json or actual.png + runtime.json
+  CI->>Adapter: Import design.json + reference.png, or produce actual.png + runtime.json
   CI->>CLI: compare or compare-all
   CLI->>Engine: Load and validate schema versions
   Engine->>Engine: Match elements and run metadata validators

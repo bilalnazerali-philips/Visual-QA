@@ -18,6 +18,55 @@ Run all commands from `C:\Bilal\Visual-QA`, or use absolute paths for every inpu
 
 ## Commands
 
+### `import-figma`
+
+Use this once per Figma component/state to acquire the two design inputs required by `compare`: the normalized `design.json` and the exact Figma `reference.png`.
+
+```text
+import-figma --url <figma-link-to-selection> [--scenario <name>] [--output <design-folder>] [--id-map <map.json>] [--token-file <local-secret-file>] [--keep-raw]
+```
+
+Before running it, create `.visualqa/figma-token.txt` below the directory from which you run the command, and place only a Figma personal access token in that file. Do not put the token in the command, configuration file, or source control.
+
+```powershell
+dotnet run --project C:\Bilal\Visual-QA\src\VisualQa.Cli -- import-figma `
+  --url "https://www.figma.com/design/<file-key>/<file-name>?node-id=<selected-node-id>&m=dev"
+```
+
+With only `--url`, the CLI derives a readable name from the Figma component set and selected variant, writes to `visual-tests/<derived-component-name>/design`, and prints every output path. For example, the Figma Dialog variant `Signal=Caution, Translucency=Solid` becomes `visual-tests/Dialog.Caution.Solid/design`.
+
+If the default token file is missing, the command exits with code `2` and tells you the exact file path to create. `.visualqa/` is ignored by Git. Use `--token-file` to use a different local secret file; it overrides the default.
+
+```powershell
+dotnet run --project C:\Bilal\Visual-QA\src\VisualQa.Cli -- import-figma `
+  --url "<figma-link-to-selection>" `
+  --output C:\VisualQaFixtures\CustomComponent\design `
+  --token-file C:\Secrets\figma-token.txt
+```
+
+Copy the URL with **Copy link to selection** after selecting one component or state in Figma. The command calls the official Figma node and image APIs at `1x`, requesting the selected node's absolute bounds so the reference canvas aligns with the design geometry. It writes `design.json`, `reference.png`, and non-secret provenance in `figma-source.json`. `--keep-raw` also writes `raw-figma-node.json` for troubleshooting; it is ignored by Git. An optional `--id-map` is a JSON object mapping Figma node IDs to stable runtime QA IDs, for example `{ "15228:79044": "button-label" }`.
+
+This import has no role during a normal offline comparison. It is an acquisition step. It normalizes selected-node geometry, text, available typography, primary solid colors, and basic icon candidates; unavailable Figma fields remain unavailable rather than being guessed.
+
+#### Batch import with `--url-file`
+
+Use a text file containing one copied Figma link to selection per line. Blank lines and lines beginning with `#` are ignored; duplicate URLs are imported only once.
+
+```text
+# Dialog fixture states
+https://www.figma.com/design/<file-key>/Filament?node-id=<first-node-id>&m=dev
+https://www.figma.com/design/<file-key>/Filament?node-id=<second-node-id>&m=dev
+```
+
+```powershell
+dotnet run --project C:\Bilal\Visual-QA\src\VisualQa.Cli -- import-figma `
+  --url-file .visualqa\figma-import-urls.txt
+```
+
+Each URL uses the same dynamic name and default output rules as a single import. Imports run sequentially to avoid unnecessary Figma API pressure. The command continues through individual import failures, prints each result, and writes `visual-tests/import-summary.json`. It returns `0` when all URLs import, `1` when one or more URLs fail, and `2` for invalid input such as a missing token or URL file.
+
+You may also repeat `--url` in one command. Do not combine batch mode with `--scenario`, `--output`, or `--id-map`, because those options apply to one component only.
+
 ### `compare-images`
 
 Use this for visual-only comparison. It needs only two PNG images and does not require Figma JSON or runtime metadata.
@@ -181,6 +230,6 @@ Use a controlled capture environment before relaxing thresholds: fixed dimension
 - WPF capture and `calibrate` require Windows.
 - React capture requires a working Playwright/Chromium environment.
 
-## What is not currently a CLI command
+## Figma import boundary
 
-The repository contains a Figma normalization library, but it does not yet expose a `visualqa import-figma` command. Create `design.json` through the library or an integration utility, then use `compare`.
+`import-figma` is the only CLI command that contacts Figma. It is an acquisition step, not part of a normal offline comparison. `compare` and `compare-all` consume the generated files locally. The importer normalizes selected-node geometry, text, available typography, primary solid colors, and basic icon candidates. Use `--id-map` for stable WPF/React metadata matching where Figma layer names differ from application QA IDs.

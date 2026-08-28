@@ -7,3 +7,5 @@ results/
 manual-results/
 calibration-results/
 qa-release/
+**/raw-figma-node.json
+.visualqa/
