@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "name": "Input.Buttons.Button.Default",
   "platform": "wpf",
-  "width": 84,
+  "width": 85.33333333333333,
   "height": 40,
   "dpiX": 144,
   "dpiY": 144,
@@ -15,49 +15,50 @@
   },
   "elements": [
     {
-      "id": "sample-root",
-      "type": "Default",
-      "bounds": {
-        "x": 0,
-        "y": 0,
-        "width": 84,
-        "height": 40
-      },
-      "text": "System.Windows.Controls.Button: Button",
-      "fontFamily": "Segoe UI",
-      "fontSize": 12,
-      "fontWeight": "Normal",
-      "foregroundColor": "#000000",
-      "backgroundColor": null,
-      "margin": {
-        "top": 0,
-        "right": 0,
-        "bottom": 0,
-        "left": 0
-      },
-      "padding": {
-        "top": 0,
-        "right": 0,
-        "bottom": 0,
-        "left": 0
-      },
-      "isVisible": true
-    },
-    {
-      "id": "primary-button",
+      "id": "button-root",
       "type": "Button",
+      "role": null,
       "bounds": {
         "x": 0,
         "y": 0,
-        "width": 84,
+        "width": 85.33333333333333,
         "height": 40
       },
-      "text": "Button",
+      "text": null,
       "fontFamily": "./NeueFrutigerWorld/#Neue Frutiger World",
       "fontSize": 16,
+      "lineHeight": null,
+      "letterSpacing": null,
       "fontWeight": "Bold",
       "foregroundColor": "#15191E",
       "backgroundColor": "#00438A",
+      "borderColor": "#00438A",
+      "borderThickness": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "cornerRadius": {
+        "topLeft": 20,
+        "topRight": 20,
+        "bottomRight": 20,
+        "bottomLeft": 20
+      },
+      "opacity": null,
+      "iconName": null,
+      "imageSource": null,
+      "imagePixelWidth": null,
+      "imagePixelHeight": null,
+      "horizontalAlignment": "Left",
+      "verticalAlignment": "Top",
+      "flowDirection": "LeftToRight",
+      "textAlignment": null,
+      "textWrapping": null,
+      "textTrimming": null,
+      "isClipped": null,
+      "canHorizontallyScroll": null,
+      "canVerticallyScroll": null,
       "margin": {
         "top": 0,
         "right": 0,
@@ -69,6 +70,55 @@
         "right": 16,
         "bottom": 8,
         "left": 16
+      },
+      "isVisible": true
+    },
+    {
+      "id": "button-label",
+      "type": "TextBlock",
+      "role": null,
+      "bounds": {
+        "x": 16.666666666666668,
+        "y": 8,
+        "width": 52,
+        "height": 26.666666666666668
+      },
+      "text": "Button",
+      "fontFamily": "./NeueFrutigerWorld/#Neue Frutiger World",
+      "fontSize": 16,
+      "lineHeight": 24,
+      "letterSpacing": null,
+      "fontWeight": "Bold",
+      "foregroundColor": "#15191E",
+      "backgroundColor": null,
+      "borderColor": null,
+      "borderThickness": null,
+      "cornerRadius": null,
+      "opacity": null,
+      "iconName": null,
+      "imageSource": null,
+      "imagePixelWidth": null,
+      "imagePixelHeight": null,
+      "horizontalAlignment": "Stretch",
+      "verticalAlignment": "Stretch",
+      "flowDirection": "LeftToRight",
+      "textAlignment": "Left",
+      "textWrapping": "NoWrap",
+      "textTrimming": "None",
+      "isClipped": null,
+      "canHorizontallyScroll": null,
+      "canVerticallyScroll": null,
+      "margin": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "padding": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
       },
       "isVisible": true
     }

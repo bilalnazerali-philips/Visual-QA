@@ -41,7 +41,8 @@ try
             var runtime = Read<RuntimeComponentSnapshot>(runtimeFile); ArtifactSchema.Require(runtime.SchemaVersion);
             var resultDirectory = Path.Combine(output, Path.GetFileName(component), platform);
             var findings = new List<QaFinding>();
-            foreach (var validator in new IQaValidator[] { new StructuralValidator(), new GeometryValidator(), new SpacingValidator(), new TypographyValidator(), new IconValidator() }) findings.AddRange(validator.Validate(design, runtime, options.Tolerances));
+            // Checklist phase 1: compare only evidence present in both contracts; final pixels cover all visual layers.
+            foreach (var validator in new IQaValidator[] { new ComponentGeometryValidator(), new StructuralValidator(), new GeometryValidator(), new SpacingValidator(), new TypographyValidator(options.MetadataAliases.Enabled ? options.MetadataAliases.FontFamily : null), new ColorValidator(), new AppearanceValidator(), new IconValidator() }) findings.AddRange(validator.Validate(design, runtime, options.Tolerances));
             var image = new PixelDiffEngine().Compare(reference, actual, resultDirectory, options.Visual.PixelColorTolerance, options.Regions.MinimumArea, options.Alignment.MaxTranslationPx);
             findings.Add(new() { Rule = "pixel.difference", Status = image.DifferentPixels == 0 ? QaStatus.Pass : QaStatus.Warning, Expected = 0, Actual = image.DifferentPixels, Delta = image.DifferentPixels, Message = $"{image.DifferentPixels}/{image.TotalPixels} pixels differ." });
             findings.Add(new() { Rule = "perceptual.ssim", Status = image.Similarity >= options.Visual.SsimPass ? QaStatus.Pass : image.Similarity >= options.Visual.SsimWarning ? QaStatus.Warning : QaStatus.Fail, Expected = options.Visual.SsimPass, Actual = image.Similarity, Message = $"Structural similarity {image.Similarity:P2}." });

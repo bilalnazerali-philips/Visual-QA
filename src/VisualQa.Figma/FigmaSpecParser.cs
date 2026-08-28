@@ -61,11 +61,18 @@ public sealed class FigmaNormalizer
                 Text = Get(node, "characters"),
                 FontFamily = Nested(node, "style", "fontFamily"),
                 FontSize = Number(node, "style", "fontSize"),
-                FontWeight = Nested(node, "style", "fontWeight"),
+                FontWeight = StringOrNumber(node, "style", "fontWeight"),
                 LineHeight = Number(node, "style", "lineHeightPx"),
                 LetterSpacing = Number(node, "style", "letterSpacing"),
                 ForegroundColor = type == "TEXT" ? Paint(node, "fills") : null,
                 BackgroundColor = type == "TEXT" ? null : Paint(node, "fills") ?? Paint(node, "backgrounds"),
+                BorderColor = Paint(node, "strokes"),
+                BorderThickness = Paint(node, "strokes") is null ? null : Uniform(Number(node, "strokeWeight")),
+                Padding = Padding(node),
+                CornerRadius = Number(node, "cornerRadius") is { } radius ? CornerRadiusSpec.Uniform(radius) : null,
+                Opacity = Number(node, "opacity"),
+                TextAlignment = Nested(node, "style", "textAlignHorizontal"),
+                IsVisible = Bool(node, "visible") ?? true,
                 IconName = IconName(type, name)
             });
         }
@@ -110,7 +117,12 @@ public sealed class FigmaNormalizer
 
     private static string? Get(JsonElement element, string name) => element.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.String ? value.GetString() : null;
     private static string? Nested(JsonElement element, string parent, string name) => element.TryGetProperty(parent, out var value) ? Get(value, name) : null;
+    private static string? StringOrNumber(JsonElement element, string parent, string name) => element.TryGetProperty(parent, out var value) && value.TryGetProperty(name, out var result) ? result.ValueKind == JsonValueKind.String ? result.GetString() : result.ValueKind == JsonValueKind.Number ? result.GetDouble().ToString(System.Globalization.CultureInfo.InvariantCulture) : null : null;
     private static double? Number(JsonElement element, string parent, string name) => element.TryGetProperty(parent, out var value) && value.TryGetProperty(name, out var number) && number.TryGetDouble(out var result) ? result : null;
+    private static double? Number(JsonElement element, string name) => element.TryGetProperty(name, out var number) && number.TryGetDouble(out var result) ? result : null;
+    private static ThicknessSpec? Uniform(double? value) => value is null ? null : new ThicknessSpec(value.Value, value.Value, value.Value, value.Value);
+    private static ThicknessSpec? Padding(JsonElement element) { var top=Number(element,"paddingTop"); var right=Number(element,"paddingRight"); var bottom=Number(element,"paddingBottom"); var left=Number(element,"paddingLeft"); return top is null&&right is null&&bottom is null&&left is null?null:new ThicknessSpec(top??0,right??0,bottom??0,left??0); }
+    private static bool? Bool(JsonElement element,string name) => element.TryGetProperty(name,out var value) && (value.ValueKind==JsonValueKind.True||value.ValueKind==JsonValueKind.False) ? value.GetBoolean() : null;
     private static RectSpec? Bounds(JsonElement element) => element.TryGetProperty("absoluteBoundingBox", out var bounds) && bounds.TryGetProperty("x", out var x) && bounds.TryGetProperty("y", out var y) && bounds.TryGetProperty("width", out var width) && bounds.TryGetProperty("height", out var height) ? new RectSpec(x.GetDouble(), y.GetDouble(), width.GetDouble(), height.GetDouble()) : null;
 
     private static string? Paint(JsonElement element, string name)
